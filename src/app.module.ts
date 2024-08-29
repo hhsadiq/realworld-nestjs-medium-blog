@@ -29,6 +29,7 @@ import { HomeModule } from './home/home.module';
 import mailConfig from './mail/config/mail.config';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from './mailer/mailer.module';
+import { ProfilesModule } from './profiles/profiles.module';
 import { SessionModule } from './session/session.module';
 import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
@@ -44,6 +45,7 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
     TagsModule,
     CommentsModule,
     ArticlesModule,
+    ProfilesModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [
