@@ -17,19 +17,19 @@ import {
 
 import { Follow } from '@src/profiles/domain/profiles';
 
-import { FollowerActionDto } from './dto/follower.dto';
+import { FollowerDto } from './dto/follower.dto';
 import { ProfilesService } from './profiles.service';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('Profiles')
 @Controller({
   path: 'profiles',
   version: '1',
 })
 export class ProfilesController {
-  constructor(private readonly followService: ProfilesService) {}
+  constructor(private readonly profileService: ProfilesService) {}
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
   @Post(':username/follow')
   @ApiParam({
     name: 'username',
@@ -41,14 +41,12 @@ export class ProfilesController {
   })
   async follow(
     @Param('username') username: string,
-    @Body() followerActionDto: FollowerActionDto,
+    @Body() followerActionDto: FollowerDto,
     @Request() request,
   ) {
-    return this.followService.follow(request.user.id, username);
+    return this.profileService.follow(request.user.id, username);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
   @Delete(':username/follow')
   @ApiParam({
     name: 'username',
@@ -56,6 +54,6 @@ export class ProfilesController {
     required: true,
   })
   async unfollow(@Request() request, @Param('username') username: string) {
-    return this.followService.unfollow(request.user.id, username);
+    return this.profileService.unfollow(request.user.id, username);
   }
 }

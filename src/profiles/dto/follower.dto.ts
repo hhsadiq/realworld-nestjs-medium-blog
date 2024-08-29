@@ -4,7 +4,7 @@ import {
 } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-export class FollowerActionDto {
+export class FollowerDto {
   @ApiProperty()
   @IsString()
   username: string;
