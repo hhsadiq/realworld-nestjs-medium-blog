@@ -39,7 +39,7 @@ export class ProfilesController {
   @ApiCreatedResponse({
     type: Follow,
   })
-  async follow(
+  follow(
     @Param('username') username: string,
     @Body() followerActionDto: FollowerDto,
     @Request() request,
@@ -53,7 +53,7 @@ export class ProfilesController {
     type: String,
     required: true,
   })
-  async unfollow(@Request() request, @Param('username') username: string) {
+  unfollow(@Request() request, @Param('username') username: string) {
     return this.profileService.unfollow(request.user.id, username);
   }
 }
