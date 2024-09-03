@@ -11,10 +11,12 @@ import {
   UpdateDateColumn,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 
 import { AuthProvidersEnum } from '@src/auth/auth-providers.enum';
 import { TABLES } from '@src/common/constants';
+import { FavoriteEntity } from '@src/favorites/infrastructure/persistence/relational/entities/favorite.entity';
 import { FileEntity } from '@src/files/infrastructure/persistence/relational/entities/file.entity';
 import { RoleEntity } from '@src/roles/infrastructure/persistence/relational/entities/role.entity';
 import { StatusEntity } from '@src/statuses/infrastructure/persistence/relational/entities/status.entity';
@@ -92,4 +94,7 @@ export class UserEntity extends EntityRelationalHelper {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => FavoriteEntity, (favorite) => favorite.user)
+  favorites: FavoriteEntity[];
 }

@@ -83,4 +83,8 @@ export class CommentsService {
     }
     return comment;
   }
+
+  findById(id: Comment['id']): Promise<any> {
+    return this.commentRepository.findById(id);
+  }
 }

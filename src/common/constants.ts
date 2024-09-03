@@ -1,4 +1,5 @@
 export const TABLES = {
+  favorite: 'favorite',
   article: 'article',
   comment: 'comment',
   file: 'file',

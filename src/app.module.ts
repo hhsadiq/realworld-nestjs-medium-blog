@@ -23,6 +23,7 @@ import appConfig from './config/app.config';
 import { AllConfigType } from './config/config.type';
 import databaseConfig from './database/config/database.config';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
+import { FavoritesModule } from './favorites/favorites.module';
 import fileConfig from './files/config/file.config';
 import { FilesModule } from './files/files.module';
 import { HomeModule } from './home/home.module';
@@ -41,6 +42,7 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
 });
 @Module({
   imports: [
+    FavoritesModule,
     TagsModule,
     CommentsModule,
     ArticlesModule,
