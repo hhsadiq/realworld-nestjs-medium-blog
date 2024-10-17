@@ -82,6 +82,34 @@ export class ArticlesController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
+  @Get('feed')
+  @ApiOkResponse({
+    type: InfinityPaginationResponse(Article),
+  })
+  async findAll_1(
+    @Query() query: FindAllArticlesDto,
+    @Request() request,
+  ): Promise<InfinityPaginationResponseDto<Article>> {
+    const page = query?.page ?? 1;
+    let limit = query?.limit ?? 10;
+    if (limit > 50) {
+      limit = 50;
+    }
+
+    return infinityPagination(
+      await this.articlesService.findAllWithPagination_feed({
+        paginationOptions: {
+          page,
+          limit,
+        },
+        userJwtPayload: request.user,
+      }),
+      { page, limit },
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOkResponse({
     type: InfinityPaginationResponse(Article),
