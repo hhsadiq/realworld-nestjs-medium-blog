@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { CommentsModule } from '@src/comments/comments.module';
 import { DatabaseHelperModule } from '@src/database-helpers/database-helper.module';
+import { ProfileModule } from '@src/profile/profile.module';
 import { TagsModule } from '@src/tags/tags.module';
 import { UsersModule } from '@src/users/users.module';
 
@@ -16,6 +17,7 @@ import { RelationalArticlePersistenceModule } from './infrastructure/persistence
     CommentsModule,
     TagsModule,
     DatabaseHelperModule,
+    ProfileModule,
   ],
   controllers: [ArticlesController],
   providers: [ArticlesService],

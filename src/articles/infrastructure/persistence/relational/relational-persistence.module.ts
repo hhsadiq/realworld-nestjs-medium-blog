@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ArticleAbstractRepository } from '@src/articles/infrastructure/persistence/article.abstract.repository';
+import { ArticleRepository } from '@src/articles/infrastructure/persistence/article.repository';
 
 import { ArticleEntity } from './entities/article.entity';
 import { ArticleRelationalRepository } from './repositories/article.repository';
@@ -10,10 +10,10 @@ import { ArticleRelationalRepository } from './repositories/article.repository';
   imports: [TypeOrmModule.forFeature([ArticleEntity])],
   providers: [
     {
-      provide: ArticleAbstractRepository,
+      provide: ArticleRepository,
       useClass: ArticleRelationalRepository,
     },
   ],
-  exports: [ArticleAbstractRepository],
+  exports: [ArticleRepository],
 })
 export class RelationalArticlePersistenceModule {}

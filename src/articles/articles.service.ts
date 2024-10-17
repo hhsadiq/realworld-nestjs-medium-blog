@@ -7,6 +7,7 @@ import { CommentsService } from '@src/comments/comments.service';
 import { Comment } from '@src/comments/domain/comment';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from '@src/common/exceptions';
 import { DatabaseHelperRepository } from '@src/database-helpers/database-helper';
+import { ProfileService } from '@src/profile/profile.service';
 import { Tag } from '@src/tags/domain/tag';
 import { TagsService } from '@src/tags/tags.service';
 import { UsersService } from '@src/users/users.service';
@@ -17,16 +18,17 @@ import { IPaginationOptions } from '@src/utils/types/pagination-options';
 import { Article } from './domain/article';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { ArticleAbstractRepository } from './infrastructure/persistence/article.abstract.repository';
+import { ArticleRepository } from './infrastructure/persistence/article.repository';
 
 @Injectable()
 export class ArticlesService {
   constructor(
-    private readonly articleRepository: ArticleAbstractRepository,
+    private readonly articleRepository: ArticleRepository,
     private readonly commentsService: CommentsService,
     private readonly tagsService: TagsService,
     private readonly dbHelperRepository: DatabaseHelperRepository,
     private userService: UsersService,
+    private readonly profileService: ProfileService,
   ) {}
 
   async create(
@@ -214,5 +216,27 @@ export class ArticlesService {
       throw NOT_FOUND('Article', { [field]: value });
     }
     return article;
+  }
+
+  async findAllWithPagination_feed({
+    paginationOptions,
+    userJwtPayload,
+  }: {
+    paginationOptions: IPaginationOptions;
+    userJwtPayload: JwtPayloadType;
+  }) {
+    const followings = await this.profileService.Allfollowers(userJwtPayload);
+
+    if (followings == null || followings.length < 1) {
+      return [];
+    }
+
+    return this.articleRepository.findAllWithPagination_feed({
+      paginationOptions: {
+        page: paginationOptions.page,
+        limit: paginationOptions.limit,
+      },
+      followingsList: followings,
+    });
   }
 }
