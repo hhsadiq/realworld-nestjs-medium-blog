@@ -5,4 +5,4 @@ after: "export class"
 ---
 
 @ApiProperty()
-<%= h.inflection.camelize(property, true) %>: <%= h.getType(type) %>;
+<%= h.inflection.camelize(property, true) %><% if (isOptional) { -%>?<% } -%>: <%= h.getType(type) %>;

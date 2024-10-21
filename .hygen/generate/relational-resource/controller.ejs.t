@@ -3,33 +3,61 @@ to: src/<%= h.inflection.transform(name, ['pluralize', 'underscore', 'dasherize'
 ---
 import {
   Controller,
+  <% if (functionalities.includes('findAll') || functionalities.includes('findOne')) { %>
   Get,
+  <% } %>
+  <% if (functionalities.includes('create')) { %>
   Post,
+  <% } %>
+  <% if (functionalities.includes('update') || functionalities.includes('create')) { %>
   Body,
+  <% } %>
+  <% if (functionalities.includes('update')) { %>
   Patch,
+  <% } %>
+  <% if (functionalities.includes('findOne') || functionalities.includes('update') || functionalities.includes('delete')) { %>
   Param,
+  <% } %>
+  <% if (functionalities.includes('delete')) { %>
   Delete,
+  <% } %>
   UseGuards,
+  <% if (functionalities.includes('findAll')) { %>
   Query,
+  <% } %>
 } from '@nestjs/common';
-import { <%= h.inflection.transform(name, ['pluralize']) %>Service } from './<%= h.inflection.transform(name, ['pluralize', 'underscore', 'dasherize']) %>.service';
-import { Create<%= name %>Dto } from './dto/create-<%= h.inflection.transform(name, ['underscore', 'dasherize']) %>.dto';
-import { Update<%= name %>Dto } from './dto/update-<%= h.inflection.transform(name, ['underscore', 'dasherize']) %>.dto';
 import {
   ApiBearerAuth,
+  <% if (functionalities.includes('create')) { %>
   ApiCreatedResponse,
+  <% } %>
+  <% if (functionalities.includes('findAll') || functionalities.includes('update')) { %>
   ApiOkResponse,
+  <% } %>
+  <% if (functionalities.includes('findOne') || functionalities.includes('update') || functionalities.includes('delete')) { %>
   ApiParam,
+  <% } %>
   ApiTags,
 } from '@nestjs/swagger';
+import { <%= h.inflection.transform(name, ['pluralize']) %>Service } from './<%= h.inflection.transform(name, ['pluralize', 'underscore', 'dasherize']) %>.service';
+<% if (functionalities.includes('create')) { %>
+import { Create<%= name %>Dto } from './dto/create-<%= h.inflection.transform(name, ['underscore', 'dasherize']) %>.dto';
+<% } %>
+<% if (functionalities.includes('update')) { %>
+import { Update<%= name %>Dto } from './dto/update-<%= h.inflection.transform(name, ['underscore', 'dasherize']) %>.dto';
+<% } %>
+<% if (functionalities.includes('create') || functionalities.includes('update') || functionalities.includes('findAll')) { %>
 import { <%= name %> } from './domain/<%= h.inflection.transform(name, ['underscore', 'dasherize']) %>';
+<% } %>
 import { AuthGuard } from '@nestjs/passport';
+<% if (functionalities.includes('findAll')) { %>
 import {
   InfinityPaginationResponse,
   InfinityPaginationResponseDto,
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
 import { FindAll<%= h.inflection.transform(name, ['pluralize']) %>Dto } from './dto/find-all-<%= h.inflection.transform(name, ['pluralize', 'underscore', 'dasherize']) %>.dto';
+<% } %>
 
 @ApiTags('<%= h.inflection.transform(name, ['pluralize', 'humanize']) %>')
 @ApiBearerAuth()
@@ -41,6 +69,7 @@ import { FindAll<%= h.inflection.transform(name, ['pluralize']) %>Dto } from './
 export class <%= h.inflection.transform(name, ['pluralize']) %>Controller {
   constructor(private readonly <%= h.inflection.camelize(h.inflection.pluralize(name), true) %>Service: <%= h.inflection.transform(name, ['pluralize']) %>Service) {}
 
+  <% if (functionalities.includes('create')) { %>
   @Post()
   @ApiCreatedResponse({
     type: <%= name %>,
@@ -48,7 +77,9 @@ export class <%= h.inflection.transform(name, ['pluralize']) %>Controller {
   create(@Body() create<%= name %>Dto: Create<%= name %>Dto) {
     return this.<%= h.inflection.camelize(h.inflection.pluralize(name), true) %>Service.create(create<%= name %>Dto);
   }
+  <% } %>
 
+  <% if (functionalities.includes('findAll')) { %>
   @Get()
   @ApiOkResponse({
     type: InfinityPaginationResponse(<%= name %>),
@@ -72,7 +103,9 @@ export class <%= h.inflection.transform(name, ['pluralize']) %>Controller {
       { page, limit },
     );
   }
+  <% } %>
 
+  <% if (functionalities.includes('findOne')) { %>
   @Get(':id')
   @ApiParam({
     name: 'id',
@@ -82,7 +115,9 @@ export class <%= h.inflection.transform(name, ['pluralize']) %>Controller {
   findOne(@Param('id') id: string) {
     return this.<%= h.inflection.camelize(h.inflection.pluralize(name), true) %>Service.findOne(id);
   }
+  <% } %>
 
+  <% if (functionalities.includes('update')) { %>
   @Patch(':id')
   @ApiParam({
     name: 'id',
@@ -98,7 +133,9 @@ export class <%= h.inflection.transform(name, ['pluralize']) %>Controller {
   ) {
     return this.<%= h.inflection.camelize(h.inflection.pluralize(name), true) %>Service.update(id, update<%= name %>Dto);
   }
+  <% } %>
 
+  <% if (functionalities.includes('delete')) { %>
   @Delete(':id')
   @ApiParam({
     name: 'id',
@@ -108,4 +145,5 @@ export class <%= h.inflection.transform(name, ['pluralize']) %>Controller {
   remove(@Param('id') id: string) {
     return this.<%= h.inflection.camelize(h.inflection.pluralize(name), true) %>Service.remove(id);
   }
+  <% } %>
 }

@@ -1,3 +1,18 @@
+const customTypeMapping: { [key: string]: string } = {
+  int4: 'number',
+  int8: 'number',
+  int16: 'number',
+  int32: 'number',
+  uint8: 'number',
+  uint16: 'number',
+  uint32: 'number',
+  bigint: 'bigint',
+  char: 'string',
+  longtext: 'string',
+  smallint: 'number',
+  // Add more custom mappings as needed
+};
+
 export const getType = (type: string): string => {
   switch (type) {
     case 'varchar':
@@ -17,6 +32,10 @@ export const getType = (type: string): string => {
     case 'json':
       return 'object';
     default:
+      if (customTypeMapping.hasOwnProperty(type)) {
+        console.log(customTypeMapping.hasOwnProperty(type));
+        return customTypeMapping[type];
+      }
       return 'any';
   }
 };

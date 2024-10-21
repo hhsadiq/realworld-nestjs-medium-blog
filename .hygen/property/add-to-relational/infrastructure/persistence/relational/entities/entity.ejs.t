@@ -4,5 +4,7 @@ to: src/<%= h.inflection.transform(name, ['pluralize', 'underscore', 'dasherize'
 after: "export class"
 ---
 
-@Column({ type: '<%= type %>' })
-<%= property %>: <%= h.getType(type) %>;
+@Column({ 
+  type: '<%= type %>'<% if (isOptional) { -%>, nullable: true<% } -%>
+})
+<%= property %><% if (isOptional) { -%>?<% } -%>: <%= h.getType(type) %>;

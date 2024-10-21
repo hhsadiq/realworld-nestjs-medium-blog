@@ -16,6 +16,8 @@
     "seed:create:relational": "hygen seeds create-relational",
     "generate:resource": "hygen generate relational-resource",
     "postgenerate:resource": "npm run lint -- --fix",
+    "generate:query": "hygen query relational-resource",
+    "postgenerate:query": "npm run lint -- --fix",
     "add:property": "hygen property add-to-relational",
     "postadd:property": "npm run lint -- --fix",
     "seed:run:relational": "ts-node -r tsconfig-paths/register ./src/database/seeds/relational/run-seed.ts",

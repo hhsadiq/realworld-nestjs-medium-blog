@@ -17,5 +17,8 @@ after: "export class"
   <% } else if (h.getType(type) === 'object') { -%>
   @IsObject()
   <% } -%>
-  <%= h.inflection.camelize(property, true) %>: <%= h.getType(type) %>;
+  <% if (isOptional) { -%>
+  @IsOptional()
+  <% } -%>
+  <%= h.inflection.camelize(property, true) %><% if (isOptional) { -%>?<% } -%>: <%= h.getType(type) %>;
 <% } -%>
